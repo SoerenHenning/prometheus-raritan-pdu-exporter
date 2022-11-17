@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: raritan-pdu-exporter
+spec:
+  selector:
+    matchLabels:
+      app: raritan-pdu-exporter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: raritan-pdu-exporter
+    spec:
+      containers:
+      - name: pdu-exporter
+        image: ghcr.io/soerenhenning/prometheus-raritan-pdu-exporter:v2.1.4
+        ports:
+        - containerPort: 9950
+          name: metrics
+        resources:
+          requests:
+            cpu: 5m
+            memory: 25Mi
+          limits:
+            cpu: 10m
+            memory: 50Mi
+        volumeMounts:
+        - name: exporter-config
+          mountPath: /prometheus-raritan-pdu-exporter
+      volumes:
+      - name: exporter-config
+        secret:
+          secretName: raritan-pdu-exporter-config
+          optional: false

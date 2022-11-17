@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: raritan-pdu-exporter
+  name: raritan-pdu-exporter
+spec:
+  selector:
+    matchLabels:
+        app: raritan-pdu-exporter
+  endpoints:
+    - port: metrics
+      interval: 10s
